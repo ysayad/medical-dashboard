@@ -2,19 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import {Bell, Home, LineChart, Package, Package2, ShoppingCart, Users} from "lucide-react";
 import {Button} from "@/components/ui/button";
-import {Badge} from "@/components/ui/badge";
 
 const Sidebar = () => {
     const pathname = usePathname();
 
     const sidebarLinks = [
-        { href: '/hospitals', label: 'HÃ´pitaux', icon: 'home' },
-        { href: '/doctors', label: 'Praticiens', icon: 'users' },
+        { href: '/hospitals', label: 'Hospitals', icon: 'home' },
+        { href: '/doctors', label: 'Doctors', icon: 'users' },
         { href: '/urgences', label: 'Urgences', icon: 'cart' },
-        { href: '/patients', label: 'Statistiques patients', icon: 'line-chart'},
+        { href: '/patients', label: 'Patients statistics', icon: 'line-chart'},
     ];
 
     return (
