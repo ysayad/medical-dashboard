@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kafka.KafkaMedicalProducer;
 import org.apache.commons.io.FileUtils;
 import org.mitre.synthea.engine.Generator;
 import org.mitre.synthea.export.Exporter;
@@ -15,7 +16,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
+
+    static String HOSPITAL_TOPIC = "hospital";
+    static String LOCATION_TOPIC = "location";
     public static void main(String[] args) {
+
+
         while (true) {
             // Configure options and override default file output configuration
             Generator.GeneratorOptions options = new Generator.GeneratorOptions();
@@ -73,6 +79,8 @@ public class Main {
     }
 
     private static void sendHospitalLocationData() {
+        KafkaMedicalProducer producer = new KafkaMedicalProducer();
+
         // Define the directory where the files are located
         Path outputDir = Paths.get("output/fhir");
 
@@ -106,6 +114,7 @@ public class Main {
                         // Print the Location object
                         System.out.println("Location");
                         System.out.println(jsonNode.get("resource").toPrettyString());
+                        producer.send(LOCATION_TOPIC, "shitmadrid");
                     }
                 }
             } else {
@@ -117,6 +126,8 @@ public class Main {
     }
 
     private static void sendHospitalData() {
+        KafkaMedicalProducer producer = new KafkaMedicalProducer();
+
         // Define the directory where the files are located
         Path outputDir = Paths.get("output/fhir");
 
@@ -150,6 +161,7 @@ public class Main {
                         // Print the Location object
                         System.out.println("Organization");
                         System.out.println(jsonNode.get("resource").toPrettyString());
+                        producer.send(HOSPITAL_TOPIC, "hospitalresource");
                     }
                 }
             } else {
