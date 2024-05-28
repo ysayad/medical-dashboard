@@ -11,10 +11,10 @@ const Sidebar = () => {
     const pathname = usePathname();
 
     const sidebarLinks = [
-        { href: '/hospitals', label: 'Hôpitaux' },
-        { href: '/doctors', label: 'Praticiens' },
-        { href: '/urgences', label: 'Urgences' },
-        { href: '/patients', label: 'Statistiques patients' },
+        { href: '/hospitals', label: 'HÃ´pitaux', icon: 'home' },
+        { href: '/doctors', label: 'Praticiens', icon: 'users' },
+        { href: '/urgences', label: 'Urgences', icon: 'cart' },
+        { href: '/patients', label: 'Statistiques patients', icon: 'line-chart'},
     ];
 
     return (
@@ -31,16 +31,20 @@ const Sidebar = () => {
     </div>
     <div className="flex-1">
         <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            {sidebarLinks.map(({ href, label }, index) => (
+            {sidebarLinks.map(({ href, label, icon }) => (
                 <Link
-                    key={index}
                     href={href}
                     className= { pathname === href ?
                         "flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary" :
                         "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     }
                 >
-                    <Home className="h-4 w-4" />
+                        {icon === 'home' ?
+                        <Home className="h-4 w-4" /> : icon === 'users' ?
+                                <Users className="h-4 w-4" /> : icon === 'cart' ?
+                                <ShoppingCart className="h-4 w-4" /> : icon === 'line-chart' ?
+                                <LineChart className="h-4 w-4" /> : null
+                        }
                     {label}
                 </Link>
             ))}
