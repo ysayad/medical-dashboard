@@ -1,6 +1,6 @@
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
-import {CircleUser, Home, LineChart, Menu, Package, Package2, Search, ShoppingCart, Users} from "lucide-react";
+import {CircleUser, Home, LineChart, Menu, Package, Package2, Search, ShoppingCart, Users, LayoutDashboard} from "lucide-react";
 import Link from "next/link";
 import {Badge} from "@/components/ui/badge";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
@@ -34,7 +34,7 @@ const Header = () => {
                     href="#"
                     className="flex items-center gap-2 text-lg font-semibold"
                 >
-                    <Package2 className="h-6 w-6" />
+                    <LayoutDashboard className="h-6 w-6" />
                     <span className="sr-only">Medical Dashboard</span>
                 </Link>
                 <Link
@@ -58,7 +58,7 @@ const Header = () => {
                     href="#"
                     className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                    <Package className="h-5 w-5" />
+                    <LayoutDashboard className="h-5 w-5" />
                     Products
                 </Link>
                 <Link

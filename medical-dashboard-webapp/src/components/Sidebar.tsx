@@ -2,24 +2,24 @@
 
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
-import {Bell, Home, LineChart, Package, Package2, ShoppingCart, Users} from "lucide-react";
+import {Bell, Home, LineChart, Package, Package2, ShoppingCart, Users, Hospital, Siren, LayoutDashboard} from "lucide-react";
 import {Button} from "@/components/ui/button";
 
 const Sidebar = () => {
     const pathname = usePathname();
 
     const sidebarLinks = [
-        { href: '/hospitals', label: 'Hospitals', icon: 'home' },
+        { href: '/', label: 'Hospitals', icon: 'hospital' },
         { href: '/doctors', label: 'Doctors', icon: 'users' },
-        { href: '/urgences', label: 'Urgences', icon: 'cart' },
-        { href: '/patients', label: 'Patients statistics', icon: 'line-chart'},
+        { href: '/urgences', label: 'Emergencies', icon: 'siren' },
+        { href: '/patients', label: 'Patient statistics', icon: 'line-chart'},
     ];
 
     return (
 <div className="flex h-full max-h-screen flex-col gap-2">
     <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-            <Package2 className="h-6 w-6" />
+            <LayoutDashboard className="h-6 w-6" />
             <span className="">Medical Dashboard</span>
         </Link>
         <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
@@ -38,10 +38,10 @@ const Sidebar = () => {
                         "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                     }
                 >
-                        {icon === 'home' ?
-                        <Home className="h-4 w-4" /> : icon === 'users' ?
-                                <Users className="h-4 w-4" /> : icon === 'cart' ?
-                                <ShoppingCart className="h-4 w-4" /> : icon === 'line-chart' ?
+                        {icon === 'hospital' ?
+                        <Hospital className="h-4 w-4" /> : icon === 'users' ?
+                                <Users className="h-4 w-4" /> : icon === 'siren' ?
+                                <Siren className="h-4 w-4" /> : icon === 'line-chart' ?
                                 <LineChart className="h-4 w-4" /> : null
                         }
                     {label}
