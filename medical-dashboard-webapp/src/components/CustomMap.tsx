@@ -1,15 +1,28 @@
 "use client"
 
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 
-import Map from 'react-map-gl'
+import Map, { Marker, Popup } from 'react-map-gl'
 import "mapbox-gl/dist/mapbox-gl.css"
+import {Hospital, Icon, Siren, Users} from "lucide-react";
+
 
 interface CustomMapProps {
-  className?: string;
+    className?: string;
+    markers: {label: string, lat: number, long: number, description: string, icon: string}[];
 }
 
-const CustomMap: React.FC<CustomMapProps> = ({ className }) => {
+const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
+
+    const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
+
+    const handleMarkerClick = (index: number) => {
+        setSelectedMarker(index);
+    };
+
+    useEffect(() => {
+    }, [selectedMarker]);
+
   return (
     <div className={className}>
           <Map
@@ -21,8 +34,37 @@ const CustomMap: React.FC<CustomMapProps> = ({ className }) => {
           style={{ width: '100%', height: '100%' }}
           mapStyle="mapbox://styles/mapbox/light-v11"
           mapboxAccessToken="pk.eyJ1IjoiYWNhbWVyZ3VpbGxhdW1lIiwiYSI6ImNsd3E0bzZwOTFjMHMyanJ6OXlqNzdsY3UifQ.cKA_bTwS1PQq_rGGxGBfqw"
-        />
+          >
+              {markers && markers.map((marker, index) => (
+                  <Marker
+                      key={index}
+                      longitude={marker.long}
+                      latitude={marker.lat}
+                      anchor="bottom"
+                      onClick={() => handleMarkerClick(index)}
+                  >
+                      {marker.icon === 'hospital' ?
+                          <Hospital className="h-4 w-4" size={30} color="red"/> : marker.icon === 'users' ?
+                              <Users className="h-4 w-4" size={30} color="red"/> : marker.icon === 'siren' ?
+                                  <Siren className="h-4 w-4" size={30} color="red"/> : null
+                      }
+                      {selectedMarker === index && (
+                          <Popup
+                              longitude={marker.long}
+                              latitude={marker.lat}
+                              //onClose={() => setSelectedMarker(null)}
+                          >
+                              <div>
+                                  <h2>{marker.label}</h2>
+                                  <p>{marker.description}</p>
+                              </div>
+                          </Popup>
+                      )
+                      }
 
+                  </Marker>
+                  ))}
+          </Map>
     </div>
   )
 }
