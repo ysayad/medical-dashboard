@@ -19,8 +19,8 @@ public class Main {
 
     static String HOSPITAL_TOPIC = "hospital";
     static String LOCATION_TOPIC = "location";
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
 
         while (true) {
             // Configure options and override default file output configuration
@@ -32,64 +32,70 @@ public class Main {
 
             Exporter.ExporterRuntimeOptions ero = new Exporter.ExporterRuntimeOptions();
             ero.enableQueue(Exporter.SupportedFhirVersion.R4);
+
             // Create and start generator
             Generator generator = new Generator(options, ero);
             ExecutorService generatorService = Executors.newFixedThreadPool(1);
-            generatorService.submit(() -> generator.run());
+            generatorService.submit(generator::run);
 
             // Retrieve the generated records
             int recordCount = 0;
-            while(recordCount < options.population) {
+            while (recordCount < options.population) {
                 try {
                     String jsonRecord = ero.getNextRecord();
                     recordCount++;
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     break;
                 }
             }
 
             // Shutdown the generator and wait for it to finish
             generatorService.shutdown();
-
             try {
                 if (!generatorService.awaitTermination(60, TimeUnit.SECONDS)) {
                     generatorService.shutdownNow();
                 }
             } catch (InterruptedException e) {
                 generatorService.shutdownNow();
+                Thread.currentThread().interrupt();
             }
 
-            sendHospitalLocationData();
-            sendHospitalData();
+            // Send data to Kafka
+            KafkaMedicalProducer producer = new KafkaMedicalProducer();
+            sendHospitalLocationData(producer);
+            sendHospitalData(producer);
+            producer.close();
 
+            // Cleanup output directory
             try {
-                FileUtils.deleteDirectory(new File("output"));
-                System.out.println("Dossier supprimé avec succès.");
+                Path outputPath = Paths.get("output");
+                if (Files.exists(outputPath)) {
+                    FileUtils.deleteDirectory(outputPath.toFile());
+                    System.out.println("Dossier supprimé avec succès.");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("Une erreur s'est produite lors de la suppression du dossier.");
             }
 
+            // Pause for 60 seconds
             try {
-                Thread.sleep(60000); // Pause de 60 secondes
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
 
-    private static void sendHospitalLocationData() {
-        KafkaMedicalProducer producer = new KafkaMedicalProducer();
-
+    private static void sendHospitalLocationData(KafkaMedicalProducer producer) {
         // Define the directory where the files are located
         Path outputDir = Paths.get("output/fhir");
 
         try {
-            // List all files in the directory
             Optional<Path> latestFilePath = Files.list(outputDir)
-                    // Filter files beginning with "hospitalInformation"
                     .filter(path -> path.getFileName().toString().startsWith("hospitalInformation"))
-                    // Sort them by modification time
                     .sorted((path1, path2) -> {
                         try {
                             return Files.getLastModifiedTime(path2).compareTo(Files.getLastModifiedTime(path1));
@@ -97,24 +103,17 @@ public class Main {
                             throw new RuntimeException(e);
                         }
                     })
-                    // Get the latest file
                     .findFirst();
 
             if (latestFilePath.isPresent()) {
-                // Read the file into a JsonNode
-                JsonNode rootNode = new ObjectMapper().readTree(new File(latestFilePath.get().toString()));
-
-                // Get the array node
+                JsonNode rootNode = new ObjectMapper().readTree(latestFilePath.get().toFile());
                 JsonNode arrayNode = rootNode.get("entry");
 
-                // Iterate over array elements
                 for (JsonNode jsonNode : arrayNode) {
-                    // Check if the resourceType is "Location"
-                    if (jsonNode.get("resource").get("resourceType").asText().equals("Location")) {
-                        // Print the Location object
+                    if ("Location".equals(jsonNode.get("resource").get("resourceType").asText())) {
                         System.out.println("Location");
                         System.out.println(jsonNode.get("resource").toPrettyString());
-                        producer.send(LOCATION_TOPIC, "shitmadrid");
+                        producer.send(LOCATION_TOPIC, jsonNode.get("resource").toString());
                     }
                 }
             } else {
@@ -125,18 +124,13 @@ public class Main {
         }
     }
 
-    private static void sendHospitalData() {
-        KafkaMedicalProducer producer = new KafkaMedicalProducer();
-
+    private static void sendHospitalData(KafkaMedicalProducer producer) {
         // Define the directory where the files are located
         Path outputDir = Paths.get("output/fhir");
 
         try {
-            // List all files in the directory
             Optional<Path> latestFilePath = Files.list(outputDir)
-                    // Filter files beginning with "hospitalInformation"
                     .filter(path -> path.getFileName().toString().startsWith("hospitalInformation"))
-                    // Sort them by modification time
                     .sorted((path1, path2) -> {
                         try {
                             return Files.getLastModifiedTime(path2).compareTo(Files.getLastModifiedTime(path1));
@@ -144,24 +138,17 @@ public class Main {
                             throw new RuntimeException(e);
                         }
                     })
-                    // Get the latest file
                     .findFirst();
 
             if (latestFilePath.isPresent()) {
-                // Read the file into a JsonNode
-                JsonNode rootNode = new ObjectMapper().readTree(new File(latestFilePath.get().toString()));
-
-                // Get the array node
+                JsonNode rootNode = new ObjectMapper().readTree(latestFilePath.get().toFile());
                 JsonNode arrayNode = rootNode.get("entry");
 
-                // Iterate over array elements
                 for (JsonNode jsonNode : arrayNode) {
-                    // Check if the resourceType is "Location"
-                    if (jsonNode.get("resource").get("resourceType").asText().equals("Organization")) {
-                        // Print the Location object
+                    if ("Organization".equals(jsonNode.get("resource").get("resourceType").asText())) {
                         System.out.println("Organization");
                         System.out.println(jsonNode.get("resource").toPrettyString());
-                        producer.send(HOSPITAL_TOPIC, "hospitalresource");
+                        producer.send(HOSPITAL_TOPIC, jsonNode.get("resource").toString());
                     }
                 }
             } else {
