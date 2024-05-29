@@ -109,7 +109,9 @@ public class Main {
                 // Iterate over array elements
                 for (JsonNode jsonNode : arrayNode) {
                     // Check if the resourceType is "Location"
-                    if (jsonNode.get("resource").get("resourceType").asText().equals("Location")) {
+                    if (jsonNode.get("resource").get("resourceType").asText().equals("Location")
+                            && !jsonNode.get("resource").has("description"))
+                    {
                         producer.send(LOCATION_TOPIC, jsonNode.get("resource").toPrettyString());
                     }
                 }
