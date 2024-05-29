@@ -9,7 +9,6 @@ import org.mitre.synthea.helpers.Config;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -111,10 +110,7 @@ public class Main {
                 for (JsonNode jsonNode : arrayNode) {
                     // Check if the resourceType is "Location"
                     if (jsonNode.get("resource").get("resourceType").asText().equals("Location")) {
-                        // Print the Location object
-                        System.out.println("Location");
-                        System.out.println(jsonNode.get("resource").toPrettyString());
-                        producer.send(LOCATION_TOPIC, "shitmadrid");
+                        producer.send(LOCATION_TOPIC, jsonNode.get("resource").toPrettyString());
                     }
                 }
             } else {
@@ -159,9 +155,7 @@ public class Main {
                     // Check if the resourceType is "Location"
                     if (jsonNode.get("resource").get("resourceType").asText().equals("Organization")) {
                         // Print the Location object
-                        System.out.println("Organization");
-                        System.out.println(jsonNode.get("resource").toPrettyString());
-                        producer.send(HOSPITAL_TOPIC, "hospitalresource");
+                        producer.send(HOSPITAL_TOPIC, jsonNode.get("resource").toPrettyString());
                     }
                 }
             } else {
