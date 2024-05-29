@@ -36,3 +36,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+/.idea/vcs.xml
+/.idea/misc.xml
+/.idea/workspace.xml
+/.idea/medical-dashboard.iml
+/.idea/modules.xml
