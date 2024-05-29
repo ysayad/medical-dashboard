@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kafka.KafkaMedicalProducer;
 import org.apache.commons.io.FileUtils;
 import org.mitre.synthea.engine.Generator;
 import org.mitre.synthea.export.Exporter;
@@ -8,14 +9,18 @@ import org.mitre.synthea.helpers.Config;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
+
+    static String HOSPITAL_TOPIC = "hospital";
+    static String LOCATION_TOPIC = "location";
     public static void main(String[] args) {
+
+
         while (true) {
             // Configure options and override default file output configuration
             Generator.GeneratorOptions options = new Generator.GeneratorOptions();
@@ -73,6 +78,8 @@ public class Main {
     }
 
     private static void sendHospitalLocationData() {
+        KafkaMedicalProducer producer = new KafkaMedicalProducer();
+
         // Define the directory where the files are located
         Path outputDir = Paths.get("output/fhir");
 
@@ -103,9 +110,7 @@ public class Main {
                 for (JsonNode jsonNode : arrayNode) {
                     // Check if the resourceType is "Location"
                     if (jsonNode.get("resource").get("resourceType").asText().equals("Location")) {
-                        // Print the Location object
-                        System.out.println("Location");
-                        System.out.println(jsonNode.get("resource").toPrettyString());
+                        producer.send(LOCATION_TOPIC, jsonNode.get("resource").toPrettyString());
                     }
                 }
             } else {
@@ -117,6 +122,8 @@ public class Main {
     }
 
     private static void sendHospitalData() {
+        KafkaMedicalProducer producer = new KafkaMedicalProducer();
+
         // Define the directory where the files are located
         Path outputDir = Paths.get("output/fhir");
 
@@ -148,8 +155,7 @@ public class Main {
                     // Check if the resourceType is "Location"
                     if (jsonNode.get("resource").get("resourceType").asText().equals("Organization")) {
                         // Print the Location object
-                        System.out.println("Organization");
-                        System.out.println(jsonNode.get("resource").toPrettyString());
+                        producer.send(HOSPITAL_TOPIC, jsonNode.get("resource").toPrettyString());
                     }
                 }
             } else {

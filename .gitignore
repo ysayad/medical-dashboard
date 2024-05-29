@@ -34,3 +34,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+
+.idea/vcs.xml
+.idea/misc.xml
+.idea/workspace.xml
+.idea/medical-dashboard.iml
+.idea/modules.xml
