@@ -9,7 +9,7 @@ import {Hospital, Icon, Siren, Users} from "lucide-react";
 
 interface CustomMapProps {
     className?: string;
-    markers: {label: string, lat: number, long: number, description: string, icon: string}[];
+    markers: {label: string ,lat: number ,long: number ,description: string ,icon: string ,stats: {labo: string ,prescr: string ,ope: string ,patie: string}}[];
 }
 
 const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
@@ -48,20 +48,19 @@ const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
                               <Users className="h-4 w-4" size={30} color="red"/> : marker.icon === 'siren' ?
                                   <Siren className="h-4 w-4" size={30} color="red"/> : null
                       }
-                      {selectedMarker === index && (
                           <Popup
                               longitude={marker.long}
                               latitude={marker.lat}
-                              //onClose={() => setSelectedMarker(null)}
                           >
                               <div>
                                   <h2>{marker.label}</h2>
                                   <p>{marker.description}</p>
+                                  <p>{marker.stats.patie} patients</p>
+                                  <p>{marker.stats.prescr} prescriptions</p>
+                                  <p>{marker.stats.ope} operations</p>
+                                  <p>{marker.stats.labo} laboratories</p>
                               </div>
                           </Popup>
-                      )
-                      }
-
                   </Marker>
                   ))}
           </Map>
