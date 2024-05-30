@@ -1,11 +1,9 @@
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HospitalLocation {
-
 
     public static class Identifier {
         public String system;
@@ -48,7 +46,6 @@ public class HospitalLocation {
 
     public String description;
 
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Location{");
@@ -67,6 +64,16 @@ public class HospitalLocation {
 
     @Override
     public int hashCode() {
-        return Objects.hash(resourceType, id, identifier, status, name, telecom, address, position, managingOrganization, meta);
+        return Objects.hash(
+                resourceType,
+                id,
+                identifier,
+                status,
+                name,
+                telecom,
+                address,
+                position,
+                managingOrganization,
+                meta);
     }
 }

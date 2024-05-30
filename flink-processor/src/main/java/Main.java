@@ -50,10 +50,10 @@ public class Main {
                                 .withMaxRetries(5)
                                 .build(),
                         new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                                .withUrl("jdbc:postgresql://localhost:5438/postgres")
+                                .withUrl("jdbc:postgresql://ep-dark-sea-a20skpa3-pooler.eu-central-1.aws.neon.tech:5432/verceldb")
                                 .withDriverName("org.postgresql.Driver")
-                                .withUsername("postgres")
-                                .withPassword("postgres")
+                                .withUsername("default")
+                                .withPassword("tUyXvsaMq07d")
                                 .build()));
 
         env.execute("Kafka-flink-postgres");
