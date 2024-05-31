@@ -1,11 +1,10 @@
 "use client"
 
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 
-import Map, {Marker, MarkerEvent, Popup} from 'react-map-gl'
+import Map, {Marker, Popup} from 'react-map-gl'
 import "mapbox-gl/dist/mapbox-gl.css"
 import {Hospital, Siren, Users} from "lucide-react";
-import {event} from "next/dist/build/output/log";
 
 
 interface CustomMapProps {
@@ -15,20 +14,11 @@ interface CustomMapProps {
 
 const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
 
-    //const [afficherPopup, setAfficherPopup] = useState(false);
-
     const [markerDefined, setMarkerDefined] = useState<number | null>(null);
 
     const togglePopup = (index: number) => (event: any) => {
         setMarkerDefined(index);
-        //setAfficherPopup(!afficherPopup);
-        return 1;
     };
-
-    //const closePopup = () => {
-    //    setMarkerDefined(null);
-    //    setAfficherPopup(false);
-    //};
 
     return (
     <div className={className}>
@@ -61,17 +51,17 @@ const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
                               longitude={marker.long}
                               closeButton={true}
                               closeOnClick={false}
-                              //onClose={closePopup}
                               anchor="top"
                           >
                               <div>
                                   <h2>{marker.label}</h2>
                                   <p>{marker.description}</p>
                                   <div>
-                                      <p>Labo: {marker.stats.labo}</p>
-                                      <p>Prescr: {marker.stats.prescr}</p>
-                                      <p>Ope: {marker.stats.ope}</p>
-                                      <p>Patie: {marker.stats.patie}</p>
+                                      <p>Statistics</p>
+                                      <p>Laboratories: {marker.stats.labo}</p>
+                                      <p>Prescriptions: {marker.stats.prescr}</p>
+                                      <p>Operations: {marker.stats.ope}</p>
+                                      <p>Patients: {marker.stats.patie}</p>
                                   </div>
                               </div>
                           </Popup>
