@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react'
 
 import Map, { Marker, Popup } from 'react-map-gl'
 import "mapbox-gl/dist/mapbox-gl.css"
-import {Hospital, Icon, Siren, Users} from "lucide-react";
+import {Hospital, Siren, Users} from "lucide-react";
 
 
 interface CustomMapProps {
