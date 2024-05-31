@@ -2,9 +2,10 @@
 
 import React, {useEffect, useState} from 'react'
 
-import Map, { Marker, Popup } from 'react-map-gl'
+import Map, {Marker, MarkerEvent, Popup} from 'react-map-gl'
 import "mapbox-gl/dist/mapbox-gl.css"
 import {Hospital, Siren, Users} from "lucide-react";
+import {event} from "next/dist/build/output/log";
 
 
 interface CustomMapProps {
@@ -14,16 +15,22 @@ interface CustomMapProps {
 
 const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
 
-    const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
+    //const [afficherPopup, setAfficherPopup] = useState(false);
 
-    const handleMarkerClick = (index: number) => {
-        setSelectedMarker(index);
+    const [markerDefined, setMarkerDefined] = useState<number | null>(null);
+
+    const togglePopup = (index: number) => (event: any) => {
+        setMarkerDefined(index);
+        //setAfficherPopup(!afficherPopup);
+        return 1;
     };
 
-    useEffect(() => {
-    }, [selectedMarker]);
+    //const closePopup = () => {
+    //    setMarkerDefined(null);
+    //    setAfficherPopup(false);
+    //};
 
-  return (
+    return (
     <div className={className}>
           <Map
           initialViewState={{
@@ -41,26 +48,34 @@ const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
                       longitude={marker.long}
                       latitude={marker.lat}
                       anchor="bottom"
-                      onClick={() => handleMarkerClick(index)}
+                      onClick={togglePopup(index)}
                   >
                       {marker.icon === 'hospital' ?
                           <Hospital className="h-4 w-4" size={30} color="red"/> : marker.icon === 'users' ?
                               <Users className="h-4 w-4" size={30} color="red"/> : marker.icon === 'siren' ?
                                   <Siren className="h-4 w-4" size={30} color="red"/> : null
                       }
+                      {markerDefined === index && (
                           <Popup
-                              longitude={marker.long}
                               latitude={marker.lat}
+                              longitude={marker.long}
+                              closeButton={true}
+                              closeOnClick={false}
+                              //onClose={closePopup}
+                              anchor="top"
                           >
                               <div>
                                   <h2>{marker.label}</h2>
                                   <p>{marker.description}</p>
-                                  <p>{marker.stats.patie} patients</p>
-                                  <p>{marker.stats.prescr} prescriptions</p>
-                                  <p>{marker.stats.ope} operations</p>
-                                  <p>{marker.stats.labo} laboratories</p>
+                                  <div>
+                                      <p>Labo: {marker.stats.labo}</p>
+                                      <p>Prescr: {marker.stats.prescr}</p>
+                                      <p>Ope: {marker.stats.ope}</p>
+                                      <p>Patie: {marker.stats.patie}</p>
+                                  </div>
                               </div>
                           </Popup>
+                      )}
                   </Marker>
                   ))}
           </Map>
