@@ -6,6 +6,17 @@ import Map, {Marker, Popup} from 'react-map-gl'
 import "mapbox-gl/dist/mapbox-gl.css"
 import {Hospital, Siren, Users} from "lucide-react";
 
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+
 
 interface CustomMapProps {
     className?: string;
@@ -54,14 +65,33 @@ const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
                               anchor="top"
                           >
                               <div>
-                                  <h2>{marker.label}</h2>
-                                  <p>{marker.description}</p>
+                                  <CardHeader>
+                                      <CardTitle>{marker.label}</CardTitle>
+                                      <CardDescription>
+                                          {marker.description}
+                                      </CardDescription>
+                                  </CardHeader>
                                   <div>
-                                      <p>Statistics</p>
-                                      <p>Laboratories: {marker.stats.labo}</p>
-                                      <p>Prescriptions: {marker.stats.prescr}</p>
-                                      <p>Operations: {marker.stats.ope}</p>
-                                      <p>Patients: {marker.stats.patie}</p>
+                                      <Table>
+                                          <TableCaption>Statistics</TableCaption>
+                                          <TableBody>
+                                              <TableRow>
+                                                  <TableCell className="font-medium">Laboratories</TableCell>
+                                                  <TableCell>{marker.stats.labo}</TableCell>
+                                              </TableRow>
+                                              <TableRow>
+                                                  <TableCell className="font-medium">Prescriptions</TableCell>
+                                                  <TableCell>{marker.stats.prescr}</TableCell>
+                                              </TableRow>
+                                              <TableRow>
+                                                  <TableCell className="font-medium">Operations</TableCell>
+                                                  <TableCell>{marker.stats.ope}</TableCell>
+                                              </TableRow><TableRow>
+                                              <TableCell className="font-medium">Patients</TableCell>
+                                              <TableCell>{marker.stats.patie}</TableCell>
+                                          </TableRow>
+                                          </TableBody>
+                                      </Table>
                                   </div>
                               </div>
                           </Popup>
