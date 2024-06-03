@@ -20,8 +20,8 @@ import {CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
 interface CustomMapProps {
     className?: string;
-    markers: {label: string ,lat: number ,long: number ,description: string ,icon: string ,stats: {labo: string ,prescr: string ,ope: string ,patie: string}}[];
-}
+    markers: {label: string ,longitude: number ,latitude: number}[]
+};
 
 const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
 
@@ -46,20 +46,17 @@ const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
               {markers && markers.map((marker, index) => (
                   <Marker
                       key={index}
-                      longitude={marker.long}
-                      latitude={marker.lat}
+                      longitude={marker.longitude}
+                      latitude={marker.latitude}
                       anchor="bottom"
                       onClick={togglePopup(index)}
                   >
-                      {marker.icon === 'hospital' ?
-                          <Hospital className="h-4 w-4" size={30} color="red"/> : marker.icon === 'users' ?
-                              <Users className="h-4 w-4" size={30} color="red"/> : marker.icon === 'siren' ?
-                                  <Siren className="h-4 w-4" size={30} color="red"/> : null
-                      }
+                          <Hospital className="h-4 w-4" size={30} color="red"/>
+                                          
                       {markerDefined === index && (
                           <Popup
-                              latitude={marker.lat}
-                              longitude={marker.long}
+                              latitude={marker.latitude}
+                              longitude={marker.longitude}
                               closeButton={true}
                               closeOnClick={false}
                               anchor="top"
@@ -68,7 +65,7 @@ const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
                                   <CardHeader>
                                       <CardTitle>{marker.label}</CardTitle>
                                       <CardDescription>
-                                          {marker.description}
+                                          Description
                                       </CardDescription>
                                   </CardHeader>
                                   <div>
@@ -77,18 +74,18 @@ const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
                                           <TableBody>
                                               <TableRow>
                                                   <TableCell className="font-medium">Laboratories</TableCell>
-                                                  <TableCell>{marker.stats.labo}</TableCell>
+                                                  <TableCell>Statistiques</TableCell>
                                               </TableRow>
                                               <TableRow>
                                                   <TableCell className="font-medium">Prescriptions</TableCell>
-                                                  <TableCell>{marker.stats.prescr}</TableCell>
+                                                  <TableCell>Statistiques</TableCell>
                                               </TableRow>
                                               <TableRow>
                                                   <TableCell className="font-medium">Operations</TableCell>
-                                                  <TableCell>{marker.stats.ope}</TableCell>
+                                                  <TableCell>Statistiques</TableCell>
                                               </TableRow><TableRow>
                                               <TableCell className="font-medium">Patients</TableCell>
-                                              <TableCell>{marker.stats.patie}</TableCell>
+                                              <TableCell>Statistiques</TableCell>
                                           </TableRow>
                                           </TableBody>
                                       </Table>
