@@ -1,0 +1,128 @@
+version: "3.9"
+services:
+  zookeeper-edge1:
+    image: bitnami/zookeeper:latest
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - backend
+    deploy:
+      endpoint_mode: dnsrr
+      placement:
+        constraints:     
+        - node.labels.tier==kafka    
+  kafka-edge1:
+    image: bitnami/kafka:3.0.2
+    depends_on:
+      - zookeeper-edge1
+    ports:
+      - "9095:9095"
+    environment: # https://rmoff.net/2018/08/02/kafka-listeners-explained/
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper-edge1:2181
+      #KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://:9092,PROXY://0.0.0.0:9093,OUTSIDE://0.0.0.0:9095
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://:9092,PROXY://envoy1:9093,OUTSIDE://localhost:9095
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,PROXY:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_NUM_PARTITIONS: 2
+    networks:
+      - backend
+    deploy:
+      #endpoint_mode: dnsrr
+      placement:
+        constraints:     
+        - node.labels.tier==kafka      
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8082:8080"
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=edge1
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-edge1:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper-edge1:2181 
+    networks:
+      - backend
+    deploy:
+      placement:
+        constraints:     
+        - node.labels.tier==injector     
+  jobmanager:
+    build: 
+      dockerfile: Dockerfile-flink
+    ports:
+      - "8081:8081"
+      - "6123:6123"
+    command: jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+      - | 
+        FLINK_PROPERTIES=
+        metrics.reporters: prom
+        metrics.reporter.prom.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporterFactory 
+        metrics.reporter.prom.port: 9249
+        cluster.evenly-spread-out-slots: true        
+    networks:
+      - backend
+    deploy:
+      placement:
+        constraints:     
+        - node.labels.tier==jobmanager
+  taskmanager:
+    build: 
+      dockerfile: Dockerfile-flink
+    privileged: true
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    links:
+      - "jobmanager:jobmanager"
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+      - BEAM_WORKER_POOL_IN_DOCKER_VM=1
+      - | 
+        FLINK_PROPERTIES=
+        taskmanager.numberOfTaskSlots: 1
+        metrics.reporters: prom
+        metrics.reporter.prom.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporterFactory 
+        metrics.reporter.prom.port: 9249
+    networks:
+      - backend      
+    deploy:
+      endpoint_mode: dnsrr
+      replicas: ${NUM_TM:-2}
+      resources:
+        limits:
+          cpus: '2'
+          #memory: 350M    
+      placement:
+        constraints:     
+        - node.labels.tier==taskmanager                 
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    networks:
+      - backend
+    environment:
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: example      
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080     
+    networks:
+      - backend      
+networks:
+  backend:
+    external: true      
