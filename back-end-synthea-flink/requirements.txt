@@ -1,0 +1,4 @@
+fhir.resources==7.1.0
+jmespath==1.0.1
+kafka-python==2.0.2
+streaming-jupyter-integrations==0.15.1
