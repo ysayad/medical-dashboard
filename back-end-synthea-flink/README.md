@@ -63,3 +63,8 @@ Chanege the path for the jar and the flink conf :
 ```bash
 %env FLINK_CONF_DIR=your_current_path/config
 ```
+
+Add the jdbc connector : 
+```bash
+wget https://repo1.maven.org/maven2/org/apache/flink/flink-connector-jdbc/3.2.0-1.18/flink-connector-jdbc-3.2.0-1.18.jar
+```
