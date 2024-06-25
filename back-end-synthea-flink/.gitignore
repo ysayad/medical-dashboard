@@ -1,2 +1,4 @@
 output/
 synthea-with-dependencies.jar
+*.jar
+.venv
