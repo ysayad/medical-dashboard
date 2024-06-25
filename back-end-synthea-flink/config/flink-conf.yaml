@@ -1,1 +1,1 @@
-pipeline.jars: file:///Users/soufiane/Workspace/agile/flink_sql_tutorial/flink-sql-connector-kafka-3.0.1-1.18.jar
+pipeline.jars: file:///Users/soufiane/Workspace/agile/flink_sql_tutorial/flink-sql-connector-kafka-3.0.1-1.18.jar;file:///Users/soufiane/Workspace/agile/medical-dashboard/back-end-synthea-flink/flink-connector-jdbc-3.2.0-1.18.jar
