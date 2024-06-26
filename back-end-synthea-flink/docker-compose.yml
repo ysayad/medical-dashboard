@@ -1,8 +1,9 @@
 version: "3.9"
 services:
   zookeeper-edge1:
-    image: bitnami/zookeeper:latest
+    image: confluentinc/cp-zookeeper:latest
     environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
       ALLOW_ANONYMOUS_LOGIN: "yes"
     networks:
       - backend
@@ -12,13 +13,13 @@ services:
         constraints:     
         - node.labels.tier==kafka    
   kafka-edge1:
-    image: bitnami/kafka:3.0.2
+    image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper-edge1
     ports:
       - "9095:9095"
     environment: # https://rmoff.net/2018/08/02/kafka-listeners-explained/
-      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper-edge1:2181
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-edge1:2181
       #KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENERS: INTERNAL://:9092,PROXY://0.0.0.0:9093,OUTSIDE://0.0.0.0:9095
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://:9092,PROXY://envoy1:9093,OUTSIDE://localhost:9095
