@@ -85,7 +85,7 @@ services:
       - BEAM_WORKER_POOL_IN_DOCKER_VM=1
       - | 
         FLINK_PROPERTIES=
-        taskmanager.numberOfTaskSlots: 1
+        taskmanager.numberOfTaskSlots: 6
         metrics.reporters: prom
         metrics.reporter.prom.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporterFactory 
         metrics.reporter.prom.port: 9249
