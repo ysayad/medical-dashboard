@@ -17,7 +17,7 @@ def generate_seed(length=10):
 
 def execute_jar(jar_path, seed, state):
     print(f"Executing jar file with seed {seed} and state {state}...")
-    subprocess.run(['java', '-jar', jar_path, '-s', seed, state], check=True)
+    subprocess.run(['java', '-jar', jar_path, '-s', seed, '-p', '10', state], check=True)
     print("Jar execution completed.")
 
 def load_fhir_resources(f):
@@ -84,5 +84,5 @@ if __name__ == "__main__":
         # Clean up output files in both directories
         clean_up(output_dirs)
         
-        # Wait for 2 minutes before next iteration
-        time.sleep(30)
+        # Wait for 60 seconds before next iteration
+        time.sleep(60)
