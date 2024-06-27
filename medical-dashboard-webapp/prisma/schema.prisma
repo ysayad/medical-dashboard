@@ -83,3 +83,74 @@ model Authenticator {
 
   @@id([userId, credentialID])
 }
+
+model hospital {
+  id_organization      String @unique
+  id_location          String
+  status               String
+  name                 String
+  telecom              String
+  address_line         String
+  city                 String
+  state                String
+  postalCode           String
+  country              String
+  longitude            Float
+  latitude             Float
+}
+
+model practitioner {
+  identifier String @unique
+  name String
+  email String
+  adress String
+  city String
+  state String
+  postalCode String
+  country String
+  gender String
+  role String
+  id_organization String
+}
+
+model patient {
+  identifier String @unique
+  surname String
+  familyName String
+  gender String
+  birthDate String
+  telecom String
+  adress String
+  city String
+  state String
+  postalCode String
+  country String
+  maritalStatus String
+}
+
+model visit {
+  identifier String @unique
+  id_organization String
+  id_practitioner String
+  id_patient String
+  status String
+  startTime String
+  endTime String
+  type String
+}
+
+model hospital_stats {
+  hospital_id String @unique
+  visit_count BigInt
+  patient_count BigInt
+  most_common_disease String
+  disease_count BigInt
+}
+
+model practitioner_stats {
+  id_practitioner String @unique
+  average_age Float
+  min_age Int
+  max_age Int
+  total_patients BigInt
+}

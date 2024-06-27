@@ -20,7 +20,7 @@ import {CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
 interface CustomMapProps {
     className?: string;
-    markers: {label: string ,lat: number ,long: number ,description: string ,icon: string ,stats: {labo: string ,prescr: string ,ope: string ,patie: string}}[];
+    markers: {label: string ,lat: number ,long: number ,description: string ,icon: string ,stats: {visitcount: string ,patientcount: string ,mostcommondisease: string ,diseasecount: string}}[];
 }
 
 const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
@@ -72,26 +72,29 @@ const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
                                       </CardDescription>
                                   </CardHeader>
                                   <div>
-                                      <Table>
-                                          <TableCaption>Statistics</TableCaption>
-                                          <TableBody>
-                                              <TableRow>
-                                                  <TableCell className="font-medium">Laboratories</TableCell>
-                                                  <TableCell>{marker.stats.labo}</TableCell>
+                                      {marker.stats ?
+                                          <Table>
+                                              <TableCaption>Statistics</TableCaption>
+                                              <TableBody>
+                                                  <TableRow>
+                                                      <TableCell className="font-medium">Visit count</TableCell>
+                                                      <TableCell>{marker.stats.visitcount}</TableCell>
+                                                  </TableRow>
+                                                  <TableRow>
+                                                      <TableCell className="font-medium">Patient count</TableCell>
+                                                      <TableCell>{marker.stats.patientcount}</TableCell>
+                                                  </TableRow>
+                                                  <TableRow>
+                                                      <TableCell className="font-medium">Most common disease</TableCell>
+                                                      <TableCell>{marker.stats.mostcommondisease}</TableCell>
+                                                  </TableRow><TableRow>
+                                                  <TableCell className="font-medium">Disease count</TableCell>
+                                                  <TableCell>{marker.stats.diseasecount}</TableCell>
                                               </TableRow>
-                                              <TableRow>
-                                                  <TableCell className="font-medium">Prescriptions</TableCell>
-                                                  <TableCell>{marker.stats.prescr}</TableCell>
-                                              </TableRow>
-                                              <TableRow>
-                                                  <TableCell className="font-medium">Operations</TableCell>
-                                                  <TableCell>{marker.stats.ope}</TableCell>
-                                              </TableRow><TableRow>
-                                              <TableCell className="font-medium">Patients</TableCell>
-                                              <TableCell>{marker.stats.patie}</TableCell>
-                                          </TableRow>
-                                          </TableBody>
-                                      </Table>
+                                              </TableBody>
+                                          </Table> : null
+                                      }
+
                                   </div>
                               </div>
                           </Popup>
