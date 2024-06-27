@@ -3,7 +3,33 @@ import CustomMap from "@/components/CustomMap"
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 
-export default function Dashboard() {
+interface Hospital {
+    id_organization: string;
+    name: string;
+    address_line: string;
+    city: string;
+    state: string;
+    postalcode: string;
+    country: string;
+    longitude: number;
+    latitude: number;
+}
+
+const fetchHospitals = async (): Promise<Hospital[]> => {
+    const res = await fetch(`${process.env.APP_URL}/api/hospitals`, {
+        cache: 'no-store',
+    });
+    if (!res.ok) {
+        throw new Error('Failed to fetch hospitals');
+    }
+    return res.json();
+};
+
+
+const Dashboard = async () => {
+
+     const hospitals = await fetchHospitals();
+     console.log(hospitals)
 
     const markers = [
         { label: 'saint-georges hospital', lat: 39.487638934472116, long: -101.27847248099424, description: '12 rue de la villette', icon: 'hospital', stats: {labo: '28',prescr: '480', ope: '94', patie: '562'} },
@@ -24,3 +50,4 @@ export default function Dashboard() {
         </div>
     )
 }
+export default Dashboard
