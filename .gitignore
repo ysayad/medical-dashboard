@@ -27,6 +27,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -88,3 +89,4 @@ build/
 /.idea/medical-dashboard.iml
 /.idea/modules.xml
 
+/.idea/.gitignore
