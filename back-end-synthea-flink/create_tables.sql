@@ -59,3 +59,13 @@ CREATE TABLE visit (
     FOREIGN KEY (id_practitioner) REFERENCES practitioner(identifier),
     FOREIGN KEY (id_patient) REFERENCES patient(identifier)
 );
+
+
+create table practitioner_stats
+(
+    id_practitioner text primary key,
+    average_age     integer,
+    min_age         integer,
+    max_age         integer,
+    total_patients  integer
+);
