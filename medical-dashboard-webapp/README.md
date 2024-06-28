@@ -3,8 +3,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 First, run the development server:
-
+( Inside the medical-dashboard-webapp directory )
 ```bash
+
+npm -i 
+
 npm run dev
 # or
 yarn dev
@@ -34,3 +37,18 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## To launch the prisma client 
+
+Run prisma:
+( Inside the medical-dashboard-webapp directory )
+```bash
+npx prisma migrate deploy
+
+npx prisma studio
+```
+You wil be redirected to the studio on your browser, if not, you can click on the link in the terminal
+
+## Google Authentication
+
+If you want to use the google authentication, it could work only if your web application is hosted on 'http://localhost:3000' 
