@@ -29,10 +29,9 @@ Please install first the Synthea generator using the following command:
 wget https://github.com/synthetichealth/synthea/releases/download/master-branch-latest/synthea-with-dependencies.jar
 ```
 
-Generate some simple samples (2 patients by default):
-```bash
-java -jar ./synthea-with-dependencies.jar
-```
+### Generate some simple samples (2 patients by default):
+run data_generator.py (you can change what you want to generate in this line ```subprocess.run(['java', '-jar', jar_path, '-s', seed, '-p', '1', state], check=True```)
+
 
 To go into further details, please check [https://github.com/synthetichealth/synthea/wiki/Basic-Setup-and-Running](https://github.com/synthetichealth/synthea/wiki/Basic-Setup-and-Running) and [https://synthetichealth.github.io/spt/#/record_viewer](https://synthetichealth.github.io/spt/#/record_viewer).
 
@@ -59,7 +58,7 @@ modify the flink-conf.yaml with your current path :
 pipeline.jars: file:///your_current_path/flink-sql-connector-kafka-3.0.1-1.18.jar
 ```
 
-Chanege the path for the jar and the flink conf : 
+Change the path for the jar and the flink conf : 
 ```bash
 %env FLINK_CONF_DIR=your_current_path/config
 ```
@@ -68,3 +67,6 @@ Add the jdbc connector :
 ```bash
 wget https://repo1.maven.org/maven2/org/apache/flink/flink-connector-jdbc/3.2.0-1.18/flink-connector-jdbc-3.2.0-1.18.jar
 ```
+
+### Run the jobs 
+To run the jobs, you just need to use the button execute all in all the files notebook_... and you will have all the jobs launched.
