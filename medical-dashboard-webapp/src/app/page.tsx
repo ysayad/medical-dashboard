@@ -2,6 +2,7 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import CustomMap from "@/components/CustomMap"
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import {log} from "next/dist/server/typescript/utils";
 
 interface Hospital {
     id_organization: string;
@@ -35,6 +36,7 @@ const fetchHospitals = async (): Promise<Hospital[]> => {
     const res = await fetch(`${process.env.APP_URL}/api/hospitals`, {
         cache: 'no-store',
     });
+    console.log("RESULT ERROR : ", res)
     if (!res.ok) {
         throw new Error('Failed to fetch hospitals');
     }

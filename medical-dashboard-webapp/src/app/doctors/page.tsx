@@ -49,6 +49,7 @@ const fetchPractitioners = async (): Promise<Practitioner[]> => {
     const res = await fetch(`${process.env.APP_URL}/api/practitioners`, {
         cache: 'no-store',
     });
+    console.log("RESULT ERROR : ", res)
     if (!res.ok) {
         throw new Error('Failed to fetch practitioners');
     }
@@ -59,6 +60,8 @@ const getPratictionerHospital = async (organizationId: string): Promise<Hospital
     const res = await fetch(`${process.env.APP_URL}/api/hospitals?hospitalId=${organizationId}`, {
         cache: 'no-store',
     });
+    console.log("RESULT ERROR : ", res)
+
     if (!res.ok) {
         throw new Error('Failed to fetch hospitals');
     }
