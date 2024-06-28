@@ -46,7 +46,7 @@ const fetchPatients = async (): Promise<Patient[]> => {
     const res = await fetch(`${process.env.APP_URL}/api/patients`, {
         cache: 'no-store',
     });
-    console.log("RESULT ERROR : ", res)
+    //console.log("RESULT ERROR : ", res)
     if (!res.ok) {
         throw new Error('Failed to fetch patients');
     }
@@ -59,7 +59,7 @@ export default async function Dashboard() {
     const session: user | null = await getAuthSession()
 
     const patients = await fetchPatients()
-    console.log(patients)
+    //console.log(patients)
 
     return (
         <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
