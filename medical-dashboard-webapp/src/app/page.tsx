@@ -15,11 +15,11 @@ interface Hospital {
     latitude: number;
 }
 
-interface Stats {
-    visitcount: number;
-    patientcount: number;
-    mostcommondisease: string;
-    diseasecount: number;
+interface StatsHospital {
+    stat1: number;
+    stat2: number;
+    stat3: string;
+    stat4: number;
 }
 
 interface Marker {
@@ -28,7 +28,7 @@ interface Marker {
     long: number;
     description: string;
     icon: string;
-    stats?: Stats
+    stats?: StatsHospital
 }
 
 const fetchHospitals = async (): Promise<Hospital[]> => {
@@ -41,7 +41,7 @@ const fetchHospitals = async (): Promise<Hospital[]> => {
     return res.json();
 };
 
-const getHospitalStats = async (hospitalId: string): Promise<Stats | null> => {
+const getHospitalStats = async (hospitalId: string): Promise<StatsHospital | null> => {
     try {
         const response = await fetch(`${process.env.APP_URL}/api/hospital_stats?hospitalId=${hospitalId}`);
         if (!response.ok) {
@@ -49,10 +49,10 @@ const getHospitalStats = async (hospitalId: string): Promise<Stats | null> => {
         }
         const data = await response.json();
         return {
-            visitcount: data.visit_count,
-            patientcount: data.patient_count,
-            mostcommondisease: data.most_common_disease,
-            diseasecount: data.disease_count
+            stat1: data.visit_count,
+            stat2: data.patient_count,
+            stat3: data.most_common_disease,
+            stat4: data.disease_count
         };
     } catch (error) {
         console.error(error);

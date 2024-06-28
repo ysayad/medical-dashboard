@@ -29,11 +29,11 @@ interface Practitioner {
     id_organization: string;
 }
 
-interface Stats {
-    averageage: number;
-    minage: number;
-    maxage: string;
-    totalpatients: number;
+interface StatsPractitioner {
+    stat1: number;
+    stat2: number;
+    stat3: string;
+    stat4: number;
 }
 
 interface Marker {
@@ -42,7 +42,7 @@ interface Marker {
     long: number;
     description: string;
     icon: string;
-    stats?: Stats
+    stats?: StatsPractitioner
 }
 
 const fetchPractitioners = async (): Promise<Practitioner[]> => {
@@ -50,7 +50,7 @@ const fetchPractitioners = async (): Promise<Practitioner[]> => {
         cache: 'no-store',
     });
     if (!res.ok) {
-        throw new Error('Failed to fetch hospitals');
+        throw new Error('Failed to fetch practitioners');
     }
     return res.json();
 };
@@ -65,7 +65,7 @@ const getPratictionerHospital = async (organizationId: string): Promise<Hospital
     return res.json();
 };
 
-const getPractitionerStats = async (practitionerId: string): Promise<Stats | null> => {
+const getPractitionerStats = async (practitionerId: string): Promise<StatsPractitioner | null> => {
     try {
         const response = await fetch(`${process.env.APP_URL}/api/practitioner_stats?practitionerId=${practitionerId}`);
         if (!response.ok) {
@@ -73,10 +73,10 @@ const getPractitionerStats = async (practitionerId: string): Promise<Stats | nul
         }
         const data = await response.json();
         return {
-            averageage: data.average_age,
-            minage: data.min_age,
-            maxage: data.max_age,
-            totalpatients: data.total_patients
+            stat1: data.average_age,
+            stat2: data.min_age,
+            stat3: data.max_age,
+            stat4: data.total_patients
         };
     } catch (error) {
         console.error(error);
@@ -91,8 +91,8 @@ const Dashboard = async () => {
     const markers: Marker[] = [];
     for (const practitioner of practitioners) {
         const hospital = await getPratictionerHospital(practitioner.id_organization)
-        //const stats = await getPractitionerStats(hospital.id_organization);
-        //console.log(stats)
+        const stats = await getPractitionerStats(practitioner.identifier);
+        console.log(stats)
         if(hospital) {
             const marker: Marker = {
                 label: practitioner.name,
@@ -100,11 +100,13 @@ const Dashboard = async () => {
                 long: hospital.longitude,
                 description: `${practitioner.adress}, ${practitioner.city}, ${practitioner.state}`,
                 icon: 'user',
-                //stats: stats || undefined
+                stats: stats || undefined
             };
             markers.push(marker);
         }
     }
+
+    console.log(markers)
 
   return (
       <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
