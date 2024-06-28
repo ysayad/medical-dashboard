@@ -17,10 +17,23 @@ import {
 } from "@/components/ui/table";
 import {CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
+interface StatsHospital {
+    visitcount: number;
+    patientcount: number;
+    mostcommondisease: string;
+    diseasecount: number;
+}
+
+interface StatsPractitioner {
+    averageage: number;
+    minage: number;
+    maxage: string;
+    totalpatients: number;
+}
 
 interface CustomMapProps {
     className?: string;
-    markers: {label: string ,lat: number ,long: number ,description: string ,icon: string ,stats: {visitcount: string ,patientcount: string ,mostcommondisease: string ,diseasecount: string}}[];
+    markers: {label: string ,lat: number ,long: number ,description: string ,icon: string ,statshospital?: StatsHospital, statspractitioner?: StatsPractitioner }[];
 }
 
 const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
@@ -72,24 +85,46 @@ const CustomMap: React.FC<CustomMapProps> = ({ className, markers}) => {
                                       </CardDescription>
                                   </CardHeader>
                                   <div>
-                                      {marker.stats ?
+                                      {marker.statshospital ?
                                           <Table>
                                               <TableCaption>Statistics</TableCaption>
                                               <TableBody>
                                                   <TableRow>
                                                       <TableCell className="font-medium">Visit count</TableCell>
-                                                      <TableCell>{marker.stats.visitcount}</TableCell>
+                                                      <TableCell>{marker.statshospital.visitcount}</TableCell>
                                                   </TableRow>
                                                   <TableRow>
                                                       <TableCell className="font-medium">Patient count</TableCell>
-                                                      <TableCell>{marker.stats.patientcount}</TableCell>
+                                                      <TableCell>{marker.statshospital.patientcount}</TableCell>
                                                   </TableRow>
                                                   <TableRow>
                                                       <TableCell className="font-medium">Most common disease</TableCell>
-                                                      <TableCell>{marker.stats.mostcommondisease}</TableCell>
+                                                      <TableCell>{marker.statshospital.mostcommondisease}</TableCell>
                                                   </TableRow><TableRow>
                                                   <TableCell className="font-medium">Disease count</TableCell>
-                                                  <TableCell>{marker.stats.diseasecount}</TableCell>
+                                                  <TableCell>{marker.statshospital.diseasecount}</TableCell>
+                                              </TableRow>
+                                              </TableBody>
+                                          </Table> : null
+                                      }
+                                      {marker.statspractitioner ?
+                                          <Table>
+                                              <TableCaption>Statistics</TableCaption>
+                                              <TableBody>
+                                                  <TableRow>
+                                                      <TableCell className="font-medium">Average age</TableCell>
+                                                      <TableCell>{marker.statspractitioner.averageage}</TableCell>
+                                                  </TableRow>
+                                                  <TableRow>
+                                                      <TableCell className="font-medium">Minimum age</TableCell>
+                                                      <TableCell>{marker.statspractitioner.minage}</TableCell>
+                                                  </TableRow>
+                                                  <TableRow>
+                                                      <TableCell className="font-medium">Maximum age</TableCell>
+                                                      <TableCell>{marker.statspractitioner.maxage}</TableCell>
+                                                  </TableRow><TableRow>
+                                                  <TableCell className="font-medium">Total of patients</TableCell>
+                                                  <TableCell>{marker.statspractitioner.totalpatients}</TableCell>
                                               </TableRow>
                                               </TableBody>
                                           </Table> : null

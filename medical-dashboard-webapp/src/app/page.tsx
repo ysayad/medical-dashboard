@@ -2,7 +2,6 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import CustomMap from "@/components/CustomMap"
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import marker from "react-map-gl/src/components/marker";
 
 interface Hospital {
     id_organization: string;
@@ -65,7 +64,6 @@ const getHospitalStats = async (hospitalId: string): Promise<Stats | null> => {
 const Dashboard = async () => {
 
      const hospitals = await fetchHospitals();
-     console.log(hospitals)
 
     const markers: Marker[] = [];
     for (const hospital of hospitals) {
@@ -81,8 +79,6 @@ const Dashboard = async () => {
         };
         markers.push(marker);
     }
-
-    console.log(markers)
 
     return (
         <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">

@@ -121,7 +121,7 @@ export default async function Header () {
             </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-            {session ? <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel> : null }
+            {session ? <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel> : null}
             <DropdownMenuSeparator />
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Support</DropdownMenuItem>

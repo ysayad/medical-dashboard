@@ -16,7 +16,7 @@ export default async function Dashboard() {
         <div className="flex flex-col">
           <Header/>
           <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-              {session && session.user.role == 'DOCTOR' ? 'vous avez le droit d accéder aux données patient' : 'vous avez pas le droit d accéder aux données patient'}
+              {session && session.user.role == 'DOCTOR' ? 'mates ça mon salaud' : 'you are not allowed to visualize the content of this page'}
           </main>
         </div>
       </div>
