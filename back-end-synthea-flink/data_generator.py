@@ -17,7 +17,7 @@ def generate_seed(length=10):
 
 def execute_jar(jar_path, seed, state):
     print(f"Executing jar file with seed {seed} and state {state}...")
-    subprocess.run(['java', '-jar', jar_path, '-s', seed, '-p', '10', state], check=True)
+    subprocess.run(['java', '-jar', jar_path, '-s', seed, '-p', '5', state], check=True)
     print("Jar execution completed.")
 
 def load_fhir_resources(f):
